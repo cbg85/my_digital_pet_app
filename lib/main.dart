@@ -54,12 +54,11 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     });
   }
 
-  void _restPet() {  // Renamed for clarity
+  void _restPet() {
     setState(() {
       energyLevel = (energyLevel + 20).clamp(0, 100);
     });
   }
-
 
   void _performActivity() {
     if (selectedActivity == "Play Time") {
@@ -67,7 +66,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     } else if (selectedActivity == "Dinner Time") {
       _feedPet();
     } else if (selectedActivity == "Bed Time") {
-      _restPet(); // Call the renamed function
+      _restPet();
     }
   }
 
@@ -79,13 +78,13 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
 
   String _getMood() {
     if (happinessLevel > 70) return "Happy 😊";
-    if (happinessLevel >= 30) return "Whatever 😐";
-    return "Sad 😞";
+    if (happinessLevel >= 30) return "Neutral 😐";
+    return "Unhappy 😞";
   }
 
   String _checkGameState() {
-    if (hungerLevel == 100 && happinessLevel <= 10) return "This game is Over! 🥺";
-    if (happinessLevel >= 80) return "Yayyyy, You Win! 🎉";
+    if (hungerLevel == 100 && happinessLevel <= 10) return "Game Over! 🥺";
+    if (happinessLevel >= 80) return "You Win! 🎉";
     return "";
   }
 
@@ -99,7 +98,52 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // ... (rest of the code is the same, except for the DropdownButton)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(labelText: "Enter Pet Name"),
+                onSubmitted: (value) {
+                  setState(() {
+                    petName = value;
+                  });
+                },
+              ),
+            ),
+            Text(
+              'Name: $petName',
+              style: TextStyle(fontSize: 22.0),
+            ),
+            SizedBox(height: 10),
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: _getPetColor(),
+                shape: BoxShape.circle,
+              ),
+              child: Center(child: Text("🐶", style: TextStyle(fontSize: 60))),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Mood: ${_getMood()}",
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 10),
+            Text('Happiness Level: $happinessLevel',
+                style: TextStyle(fontSize: 20)),
+            Text('Hunger Level: $hungerLevel', style: TextStyle(fontSize: 20)),
+            Text('Energy Level: $energyLevel', style: TextStyle(fontSize: 20)),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: LinearProgressIndicator(
+                value: energyLevel / 100,
+                backgroundColor: Colors.grey[300],
+                color: Colors.blue,
+                minHeight: 10,
+              ),
+            ),
+            SizedBox(height: 20),
             DropdownButton<String>(
               value: selectedActivity,
               items: ["Play Time", "Dinner Time", "Bed Time"]
@@ -112,7 +156,16 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
                 });
               },
             ),
-            // ... (rest of the code is the same)
+            ElevatedButton(
+              onPressed: _performActivity, // Correctly calling the function
+              child: Text("Perform Activity"),
+            ),
+            SizedBox(height: 20),
+            Text(
+              _checkGameState(),
+              style: TextStyle(
+                  fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
+            ),
           ],
         ),
       ),
