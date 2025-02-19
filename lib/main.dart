@@ -1,3 +1,5 @@
+//Chelsea Guthridge
+//David Abari
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -48,8 +50,12 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
 
   void _feedPet() {
     setState(() {
-      hungerLevel = (hungerLevel - 20).clamp(0, 100);
-      happinessLevel = (happinessLevel + 5).clamp(0, 100);
+      hungerLevel = (hungerLevel - 10).clamp(0, 100);
+      if (hungerLevel < 30) {
+        happinessLevel = (happinessLevel - 20).clamp(0, 100);
+      } else {
+        happinessLevel = (happinessLevel + 10).clamp(0, 100);
+      }
       energyLevel = (energyLevel + 10).clamp(0, 100);
     });
   }
@@ -148,7 +154,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               value: selectedActivity,
               items: ["Play Time", "Dinner Time", "Bed Time"]
                   .map((activity) =>
-                  DropdownMenuItem(value: activity, child: Text(activity)))
+                      DropdownMenuItem(value: activity, child: Text(activity)))
                   .toList(),
               onChanged: (value) {
                 setState(() {
